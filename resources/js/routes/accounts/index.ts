@@ -5,9 +5,9 @@ import {
   type RouteQueryOptions,
 } from "./../../wayfinder";
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/users'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
   url: index.url(options),
@@ -16,31 +16,31 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
 
 index.definition = {
   methods: ["get", "head"],
-  url: "/users",
+  url: "/accounts",
 } satisfies RouteDefinition<["get", "head"]>;
 
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/users'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 index.url = (options?: RouteQueryOptions) => {
   return index.definition.url + queryParams(options);
 };
 
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
   url: index.url(options),
   method: "get",
 });
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
   url: index.url(options),
@@ -48,9 +48,9 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
 });
 
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 const indexForm = (
   options?: RouteQueryOptions,
@@ -60,18 +60,18 @@ const indexForm = (
 });
 
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
   action: index.url(options),
   method: "get",
 });
 /**
- * @see \App\Http\Controllers\UserController::index
- * @see app/Http/Controllers/UserController.php:14
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::index
+ * @see app/Http/Controllers/AccountController.php:14
+ * @route '/accounts'
  */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
   action: index.url({
@@ -85,9 +85,9 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
 
 index.form = indexForm;
 /**
- * @see \App\Http\Controllers\UserController::store
- * @see app/Http/Controllers/UserController.php:32
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::store
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
  */
 export const store = (
   options?: RouteQueryOptions,
@@ -98,22 +98,22 @@ export const store = (
 
 store.definition = {
   methods: ["post"],
-  url: "/users",
+  url: "/accounts",
 } satisfies RouteDefinition<["post"]>;
 
 /**
- * @see \App\Http\Controllers\UserController::store
- * @see app/Http/Controllers/UserController.php:32
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::store
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
  */
 store.url = (options?: RouteQueryOptions) => {
   return store.definition.url + queryParams(options);
 };
 
 /**
- * @see \App\Http\Controllers\UserController::store
- * @see app/Http/Controllers/UserController.php:32
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::store
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
   url: store.url(options),
@@ -121,9 +121,9 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
 });
 
 /**
- * @see \App\Http\Controllers\UserController::store
- * @see app/Http/Controllers/UserController.php:32
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::store
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
  */
 const storeForm = (
   options?: RouteQueryOptions,
@@ -133,9 +133,9 @@ const storeForm = (
 });
 
 /**
- * @see \App\Http\Controllers\UserController::store
- * @see app/Http/Controllers/UserController.php:32
- * @route '/products'
+ * @see \App\Http\Controllers\AccountController::store
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
  */
 storeForm.post = (
   options?: RouteQueryOptions,
@@ -145,9 +145,9 @@ storeForm.post = (
 });
 
 store.form = storeForm;
-const users = {
+const accounts = {
   index: Object.assign(index, index),
   store: Object.assign(store, store),
 };
 
-export default users;
+export default accounts;
