@@ -1,12 +1,18 @@
+"use client";
+
 import NewProductDrawer from "@/components/products/new-product-drawer";
-import ProductTable from "@/components/products/product-table";
+import PageContent from "@/components/products/page-content";
 import AppLayout from "@/layouts/app-layout";
 import products from "@/routes/products";
 import { type BreadcrumbItem } from "@/types";
+import { IProductResponse } from "@/types/product.type";
+import { IListResponseData, IPageProps } from "@/types/response.type";
 import { Head, usePage } from "@inertiajs/react";
+import { useEffect, useMemo } from "react";
+import { toast } from "sonner";
 
 const ProductPage = () => {
-  const { props } = usePage();
+  const { props } = usePage<IPageProps<IProductResponse>>();
   console.log("props", props);
   const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,6 +21,27 @@ const ProductPage = () => {
     },
   ];
 
+  const productsData = useMemo(() => {
+    const { data, meta } = props["data"] as IListResponseData<IProductResponse>;
+
+    return {
+      data: data,
+      meta: meta,
+    };
+  }, [props]);
+
+  useEffect(() => {
+    console.log("props.flash.message", props.flash?.message);
+    if (props.flash?.message) {
+      toast.success("Success", {
+        description: props.flash.message,
+        position: "top-right",
+        richColors: true,
+      });
+    }
+  }, [props.flash]);
+
+  console.log("productsData", productsData);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Products" />
@@ -22,7 +49,7 @@ const ProductPage = () => {
         <NewProductDrawer />
       </div>
       <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-        <ProductTable />
+        <PageContent data={productsData.data} meta={productsData.meta} />
       </div>
     </AppLayout>
   );

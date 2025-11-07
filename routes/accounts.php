@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Settings\PasswordController;
+use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
-  // Route::redirect('products', '/products');
-  Route::get('products', [ProductController::class, 'index'])->name('products.index');
-  Route::post('products', [ProductController::class, 'store'])->name('products.store');
-  Route::get('products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
-  Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-
+  Route::redirect('account', '/accounts');
+  // Route::get('accounts', function () {
+  //   return Inertia::render('accounts/index');
+  // })->name('accounts.index');
   // Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   // Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
   // Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -1,140 +1,153 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
+import {
+  queryParams,
+  type RouteDefinition,
+  type RouteFormDefinition,
+  type RouteQueryOptions,
+} from "./../../wayfinder";
 /**
-* @see \App\Http\Controllers\ProductController::index
+ * @see \App\Http\Controllers\ProductController::index
  * @see app/Http/Controllers/ProductController.php:14
  * @route '/products'
  */
-export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: index.url(options),
-    method: 'get',
-})
+export const index = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
+  url: index.url(options),
+  method: "get",
+});
 
 index.definition = {
-    methods: ["get","head"],
-    url: '/products',
-} satisfies RouteDefinition<["get","head"]>
+  methods: ["get", "head"],
+  url: "/products",
+} satisfies RouteDefinition<["get", "head"]>;
 
 /**
-* @see \App\Http\Controllers\ProductController::index
+ * @see \App\Http\Controllers\ProductController::index
  * @see app/Http/Controllers/ProductController.php:14
  * @route '/products'
  */
 index.url = (options?: RouteQueryOptions) => {
-    return index.definition.url + queryParams(options)
-}
+  return index.definition.url + queryParams(options);
+};
 
 /**
-* @see \App\Http\Controllers\ProductController::index
+ * @see \App\Http\Controllers\ProductController::index
  * @see app/Http/Controllers/ProductController.php:14
  * @route '/products'
  */
-index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: index.url(options),
-    method: 'get',
-})
+index.get = (options?: RouteQueryOptions): RouteDefinition<"get"> => ({
+  url: index.url(options),
+  method: "get",
+});
 /**
-* @see \App\Http\Controllers\ProductController::index
+ * @see \App\Http\Controllers\ProductController::index
  * @see app/Http/Controllers/ProductController.php:14
  * @route '/products'
  */
-index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: index.url(options),
-    method: 'head',
-})
+index.head = (options?: RouteQueryOptions): RouteDefinition<"head"> => ({
+  url: index.url(options),
+  method: "head",
+});
 
-    /**
-* @see \App\Http\Controllers\ProductController::index
- * @see app/Http/Controllers/ProductController.php:14
- * @route '/products'
- */
-    const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-        action: index.url(options),
-        method: 'get',
-    })
-
-            /**
-* @see \App\Http\Controllers\ProductController::index
- * @see app/Http/Controllers/ProductController.php:14
- * @route '/products'
- */
-        indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: index.url(options),
-            method: 'get',
-        })
-            /**
-* @see \App\Http\Controllers\ProductController::index
- * @see app/Http/Controllers/ProductController.php:14
- * @route '/products'
- */
-        indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-            action: index.url({
-                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-                            _method: 'HEAD',
-                            ...(options?.query ?? options?.mergeQuery ?? {}),
-                        }
-                    }),
-            method: 'get',
-        })
-    
-    index.form = indexForm
 /**
-* @see \App\Http\Controllers\ProductController::store
+ * @see \App\Http\Controllers\ProductController::index
+ * @see app/Http/Controllers/ProductController.php:14
+ * @route '/products'
+ */
+const indexForm = (
+  options?: RouteQueryOptions,
+): RouteFormDefinition<"get"> => ({
+  action: index.url(options),
+  method: "get",
+});
+
+/**
+ * @see \App\Http\Controllers\ProductController::index
+ * @see app/Http/Controllers/ProductController.php:14
+ * @route '/products'
+ */
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
+  action: index.url(options),
+  method: "get",
+});
+/**
+ * @see \App\Http\Controllers\ProductController::index
+ * @see app/Http/Controllers/ProductController.php:14
+ * @route '/products'
+ */
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<"get"> => ({
+  action: index.url({
+    [options?.mergeQuery ? "mergeQuery" : "query"]: {
+      _method: "HEAD",
+      ...(options?.query ?? options?.mergeQuery ?? {}),
+    },
+  }),
+  method: "get",
+});
+
+index.form = indexForm;
+/**
+ * @see \App\Http\Controllers\ProductController::store
  * @see app/Http/Controllers/ProductController.php:32
  * @route '/products'
  */
-export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: store.url(options),
-    method: 'post',
-})
+export const store = (
+  options?: RouteQueryOptions,
+): RouteDefinition<"post"> => ({
+  url: store.url(options),
+  method: "post",
+});
 
 store.definition = {
-    methods: ["post"],
-    url: '/products',
-} satisfies RouteDefinition<["post"]>
+  methods: ["post"],
+  url: "/products",
+} satisfies RouteDefinition<["post"]>;
 
 /**
-* @see \App\Http\Controllers\ProductController::store
+ * @see \App\Http\Controllers\ProductController::store
  * @see app/Http/Controllers/ProductController.php:32
  * @route '/products'
  */
 store.url = (options?: RouteQueryOptions) => {
-    return store.definition.url + queryParams(options)
-}
+  return store.definition.url + queryParams(options);
+};
 
 /**
-* @see \App\Http\Controllers\ProductController::store
+ * @see \App\Http\Controllers\ProductController::store
  * @see app/Http/Controllers/ProductController.php:32
  * @route '/products'
  */
-store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: store.url(options),
-    method: 'post',
-})
+store.post = (options?: RouteQueryOptions): RouteDefinition<"post"> => ({
+  url: store.url(options),
+  method: "post",
+});
 
-    /**
-* @see \App\Http\Controllers\ProductController::store
+/**
+ * @see \App\Http\Controllers\ProductController::store
  * @see app/Http/Controllers/ProductController.php:32
  * @route '/products'
  */
-    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-        action: store.url(options),
-        method: 'post',
-    })
+const storeForm = (
+  options?: RouteQueryOptions,
+): RouteFormDefinition<"post"> => ({
+  action: store.url(options),
+  method: "post",
+});
 
-            /**
-* @see \App\Http\Controllers\ProductController::store
+/**
+ * @see \App\Http\Controllers\ProductController::store
  * @see app/Http/Controllers/ProductController.php:32
  * @route '/products'
  */
-        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-            action: store.url(options),
-            method: 'post',
-        })
-    
-    store.form = storeForm
+storeForm.post = (
+  options?: RouteQueryOptions,
+): RouteFormDefinition<"post"> => ({
+  action: store.url(options),
+  method: "post",
+});
+
+store.form = storeForm;
 const products = {
-    index: Object.assign(index, index),
-store: Object.assign(store, store),
-}
+  index: Object.assign(index, index),
+  store: Object.assign(store, store),
+};
 
-export default products
+export default products;

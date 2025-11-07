@@ -6,6 +6,8 @@ node_modules
 /public/storage
 /storage/*.key
 /storage/pail
+/resources/js/vendor
+/resources/js/actions
 /vendor
 .DS_Store
 .env

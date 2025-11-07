@@ -1,6 +1,6 @@
 import { PlaceholderPattern } from "@/components/ui/placeholder-pattern";
 import AppLayout from "@/layouts/app-layout";
-import { products } from "@/routes/products";
+import products from "@/routes/products";
 import { type BreadcrumbItem } from "@/types";
 import { Head } from "@inertiajs/react";
 
@@ -8,7 +8,7 @@ const Inventories = () => {
   const breadcrumbs: BreadcrumbItem[] = [
     {
       title: "Inventories",
-      href: products().url,
+      href: products.index().url,
     },
   ];
 
