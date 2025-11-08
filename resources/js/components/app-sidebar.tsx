@@ -45,7 +45,12 @@ const mainNavItems: NavItem[] = [
   // },
   {
     title: "User",
-    href: accounts.index(),
+    href: accounts.index.url({
+      query: {
+        page: 1,
+        take: 1,
+      },
+    }),
     icon: Users,
   },
   {
