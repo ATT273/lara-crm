@@ -23,8 +23,9 @@ interface ProductFormProps {
   setOpen: (open: boolean) => void;
 }
 const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
-  const { store } = ProductController;
-  const { data, post, setData, processing, errors } = useForm({
+  const { store, update } = ProductController;
+
+  const { data, post, put, setData, processing, errors } = useForm({
     name: initialData?.name || "",
     description: initialData?.description || "",
     unit: initialData?.unit || "",
@@ -38,11 +39,19 @@ const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    post(store.url(), {
-      onSuccess: () => {
-        setOpen(false);
-      },
-    });
+    if (initialData?.id) {
+      put(update.url(initialData.id), {
+        onSuccess: () => {
+          setOpen(false);
+        },
+      });
+    } else {
+      post(store.url(), {
+        onSuccess: () => {
+          setOpen(false);
+        },
+      });
+    }
   };
 
   return (

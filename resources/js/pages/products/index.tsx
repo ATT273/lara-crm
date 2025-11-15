@@ -13,7 +13,7 @@ import { toast } from "sonner";
 
 const ProductPage = () => {
   const { props } = usePage<IPageProps<IProductResponse>>();
-  console.log("props", props);
+
   const breadcrumbs: BreadcrumbItem[] = [
     {
       title: "Products",
@@ -31,17 +31,15 @@ const ProductPage = () => {
   }, [props]);
 
   useEffect(() => {
-    console.log("props.flash.message", props.flash?.message);
     if (props.flash?.message) {
       toast.success("Success", {
-        description: props.flash.message,
+        description: props.flash.message.message,
         position: "top-right",
         richColors: true,
       });
     }
   }, [props.flash]);
 
-  console.log("productsData", productsData);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Products" />

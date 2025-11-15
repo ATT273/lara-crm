@@ -1,4 +1,5 @@
 import { PageProps as InertiaPageProps } from "@inertiajs/core";
+import { IAccountResponse } from "./account.type";
 
 export interface IPaginate {
   take: number;
@@ -17,27 +18,11 @@ export interface IListResponseData<T> {
 
 export interface IPageProps<T> extends InertiaPageProps {
   data: IListResponseData<T>;
-  auth: IUser;
-  flash?: { message?: string };
+  auth: { user: IAccountResponse };
+  flash?: { message?: { message: string; code: string } };
   error?: { [key: string]: string[] };
   sidebarOpen?: boolean;
 }
-
-// export interface PageProps extends InertiaPageProps {
-//     flash?: {
-//       message?: string;
-//       success?: string;
-//       error?: string;
-//     };
-
-//     // Nếu bạn có thêm props khác, thêm vào đây
-//     auth?: {
-//       user: {
-//         id: number;
-//         name: string;
-//       } | null;
-//     };
-//   }
 
 export interface IUser {
   id: number;

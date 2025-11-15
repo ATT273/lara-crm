@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -36,8 +35,7 @@ const NewProductDrawer = ({
       )}
       <DrawerContent className="data-[vaul-drawer-direction=right]:sm:max-w-lg">
         <DrawerHeader>
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+          <DrawerTitle>Create new product</DrawerTitle>
         </DrawerHeader>
         <ProductForm initialData={initialData} setOpen={setOpen} />
       </DrawerContent>

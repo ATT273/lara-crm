@@ -10,6 +10,7 @@ Route::middleware('auth')->group(function () {
   Route::post('products', [ProductController::class, 'store'])->name('products.store');
   Route::get('products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
   Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+  Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 
   // Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   // Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');

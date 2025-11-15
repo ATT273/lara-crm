@@ -6,7 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import products from "@/routes/products";
+import accounts from "@/routes/accounts";
 import { IResponseMeta } from "@/types/response.type";
 
 interface PaginationProps {
@@ -24,7 +24,7 @@ const PaginationSection = ({ meta }: PaginationProps) => {
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              href={products.index.url({
+              href={accounts.index.url({
                 query: { page: page - 1, take: 5 },
               })}
               aria-disabled={!hasPrevious}
@@ -37,7 +37,7 @@ const PaginationSection = ({ meta }: PaginationProps) => {
               return (
                 <PaginationItem key={pageNumber}>
                   <PaginationLink
-                    href={products.index.url({
+                    href={accounts.index.url({
                       query: { page: pageNumber, take: 5 },
                     })}
                     isActive={pageNumber === page}
@@ -50,7 +50,7 @@ const PaginationSection = ({ meta }: PaginationProps) => {
           }
           <PaginationItem>
             <PaginationNext
-              href={products.index.url({
+              href={accounts.index.url({
                 query: { page: page + 1, take: 5 },
               })}
               aria-disabled={!hasNext}

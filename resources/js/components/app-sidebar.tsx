@@ -14,7 +14,7 @@ import accounts from "@/routes/accounts";
 import products from "@/routes/products";
 import { type NavItem } from "@/types";
 import { Link } from "@inertiajs/react";
-import { Box, Fingerprint, LayoutGrid, Users } from "lucide-react";
+import { Box, LayoutGrid, Users } from "lucide-react";
 import AppLogo from "./app-logo";
 
 const mainNavItems: NavItem[] = [
@@ -33,25 +33,20 @@ const mainNavItems: NavItem[] = [
     href: products.index.url({
       query: {
         page: 1,
-        take: 1,
+        take: 5,
       },
     }),
     icon: Box,
   },
-  // {
-  //   title: "Inventory",
-  //   href: inventories(),
-  //   icon: Package,
-  // },
   {
     title: "User",
-    href: accounts.index(),
+    href: accounts.index.url({
+      query: {
+        page: 1,
+        take: 5,
+      },
+    }),
     icon: Users,
-  },
-  {
-    title: "Role",
-    href: dashboard(),
-    icon: Fingerprint,
   },
 ];
 

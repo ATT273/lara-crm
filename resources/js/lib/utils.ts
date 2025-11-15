@@ -27,3 +27,10 @@ export function formatCurrency(
     currency,
   }).format(amount);
 }
+
+export const checkRole = (
+  userRoles: string,
+  requiredRoles: readonly string[],
+): boolean => {
+  return requiredRoles.includes(userRoles);
+};
