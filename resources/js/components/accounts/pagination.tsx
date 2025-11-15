@@ -6,7 +6,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import accounts from "@/routes/products";
+import accounts from "@/routes/accounts";
 import { IResponseMeta } from "@/types/response.type";
 
 interface PaginationProps {
@@ -23,7 +23,12 @@ const PaginationSection = ({ meta }: PaginationProps) => {
       <Pagination className="justify-end">
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" aria-disabled={!hasPrevious} />
+            <PaginationPrevious
+              href={accounts.index.url({
+                query: { page: page - 1, take: 5 },
+              })}
+              aria-disabled={!hasPrevious}
+            />
           </PaginationItem>
           {
             /* Render page numbers dynamically based on totalPages */
@@ -33,7 +38,7 @@ const PaginationSection = ({ meta }: PaginationProps) => {
                 <PaginationItem key={pageNumber}>
                   <PaginationLink
                     href={accounts.index.url({
-                      query: { page: pageNumber, take: 1 },
+                      query: { page: pageNumber, take: 5 },
                     })}
                     isActive={pageNumber === page}
                   >
@@ -44,7 +49,12 @@ const PaginationSection = ({ meta }: PaginationProps) => {
             })
           }
           <PaginationItem>
-            <PaginationNext href="#" aria-disabled={!hasNext} />
+            <PaginationNext
+              href={accounts.index.url({
+                query: { page: page + 1, take: 5 },
+              })}
+              aria-disabled={!hasNext}
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>

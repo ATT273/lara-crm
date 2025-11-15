@@ -1,8 +1,7 @@
-import ProductController from "@/actions/App/Http/Controllers/ProductController";
-import { IProductResponse } from "@/types/product.type";
-// import { Link } from "@inertiajs/react";
+import { MANAGEMENT_LEVELS } from "@/constants/role.constants";
+import { checkRole } from "@/lib/utils";
 import { IAccountResponse } from "@/types/account.type";
-import { PenLine, Trash2, UserCog } from "lucide-react";
+import { PenLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import {
@@ -13,30 +12,22 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import AssignRoleDialog from "./assign-role-dialog";
+import { useAccountContext } from "./account-provider";
+import EditUserDialog from "./edit-user-dialog";
 
 interface AccountTableProps {
   accounts: IAccountResponse[];
 }
 const AccountTable = ({ accounts }: AccountTableProps) => {
-  const { show } = ProductController;
-  const [openEditDrawer, setOpenEditDrawer] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<
-    IProductResponse | undefined
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<
+    IAccountResponse | undefined
   >();
+  const { userAuth } = useAccountContext();
 
-  const handleGetProductDetail = async (productId: number) => {
-    try {
-      const res = await fetch(show.url(productId));
-      if (!res.ok) throw new Error("Failed to load product detail");
-      const result = await res.json();
-      if (result.status === 200) {
-        setSelectedProduct(result.data);
-        setOpenEditDrawer(true);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  const handleGetUserDetail = async (user: IAccountResponse) => {
+    setSelectedUser(user);
+    setOpenEditDialog(true);
   };
   return (
     <div className="flex-1">
@@ -58,16 +49,7 @@ const AccountTable = ({ accounts }: AccountTableProps) => {
               </TableCell>
               <TableCell className="w-[200px]">{account.email}</TableCell>
               <TableCell className="w-[100px]">
-                <div className="flex items-center">
-                  {account.roleCode}USER
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="ml-2 inline-grid cursor-pointer place-items-center p-0"
-                  >
-                    <UserCog className="h-4 w-4" />
-                  </Button>
-                </div>
+                <div className="flex items-center">{account.roleCode}</div>
               </TableCell>
               <TableCell className="w-[120px]">
                 <div className="flex w-[100px] items-center justify-center">
@@ -84,7 +66,10 @@ const AccountTable = ({ accounts }: AccountTableProps) => {
                     variant="ghost"
                     size="sm"
                     className="grid place-items-center"
-                    onClick={() => handleGetProductDetail(account.id)}
+                    onClick={() => handleGetUserDetail(account)}
+                    disabled={
+                      !checkRole(userAuth?.roleCode ?? "", MANAGEMENT_LEVELS)
+                    }
                   >
                     <PenLine className="h-4 w-4" />
                   </Button>
@@ -92,6 +77,9 @@ const AccountTable = ({ accounts }: AccountTableProps) => {
                     variant="ghost"
                     size="sm"
                     className="grid place-items-center"
+                    disabled={
+                      !checkRole(userAuth?.roleCode ?? "", MANAGEMENT_LEVELS)
+                    }
                   >
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
@@ -101,10 +89,10 @@ const AccountTable = ({ accounts }: AccountTableProps) => {
           ))}
         </TableBody>
       </Table>
-      <AssignRoleDialog
-      // open={openEditDrawer}
-      // onOpenChange={setOpenEditDrawer}
-      // initialData={selectedProduct}
+      <EditUserDialog
+        open={openEditDialog}
+        onOpenChange={setOpenEditDialog}
+        userData={selectedUser}
       />
     </div>
   );

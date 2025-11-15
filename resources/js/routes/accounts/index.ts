@@ -145,9 +145,77 @@ storeForm.post = (
 });
 
 store.form = storeForm;
+
+/**
+ * @see \App\Http\Controllers\AccountController::update
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
+ */
+export const update = (
+  userId: number | string,
+  options?: RouteQueryOptions,
+): RouteDefinition<"put"> => ({
+  url: update.url(userId, options),
+  method: "put",
+});
+
+update.definition = {
+  methods: ["put"],
+  url: "/accounts/:user",
+} satisfies RouteDefinition<["put"]>;
+
+/**
+ * @see \App\Http\Controllers\AccountController::update
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
+ */
+update.url = (userId: number | string, options?: RouteQueryOptions) => {
+  return `/accounts/${userId}` + queryParams(options);
+};
+
+/**
+ * @see \App\Http\Controllers\AccountController::update
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
+ */
+update.put = (
+  userId: number | string,
+  options?: RouteQueryOptions,
+): RouteDefinition<"put"> => ({
+  url: update.url(userId, options),
+  method: "put",
+});
+
+/**
+ * @see \App\Http\Controllers\AccountController::update
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
+ */
+const updateForm = (
+  userId: number | string,
+  options?: RouteQueryOptions,
+): RouteFormDefinition<"put"> => ({
+  action: update.url(userId, options),
+  method: "put",
+});
+
+/**
+ * @see \App\Http\Controllers\AccountController::update
+ * @see app/Http/Controllers/AccountController.php:32
+ * @route '/accounts'
+ */
+updateForm.put = (
+  userId: number | string,
+  options?: RouteQueryOptions,
+): RouteFormDefinition<"put"> => ({
+  action: update.url(userId, options),
+  method: "put",
+});
+update.form = updateForm;
 const accounts = {
   index: Object.assign(index, index),
   store: Object.assign(store, store),
+  update: Object.assign(update, update),
 };
 
 export default accounts;

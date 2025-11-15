@@ -20,6 +20,8 @@ class Product extends Model
     'tags',
     'sizes',
     'images',
+    'mainCategory',
+    'subCategory'
   ];
 
   protected $casts = [

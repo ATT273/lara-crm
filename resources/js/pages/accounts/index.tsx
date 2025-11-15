@@ -1,5 +1,6 @@
 "use client";
 
+import AccountProvider from "@/components/accounts/account-provider";
 import PageContent from "@/components/accounts/page-content";
 import AppLayout from "@/layouts/app-layout";
 import accounts from "@/routes/accounts";
@@ -12,7 +13,6 @@ import { toast } from "sonner";
 
 const AccountPage = () => {
   const { props } = usePage<IPageProps<IAccountResponse>>();
-  console.log("props", props);
   const breadcrumbs: BreadcrumbItem[] = [
     {
       title: "Accounts",
@@ -30,26 +30,24 @@ const AccountPage = () => {
   }, [props]);
 
   useEffect(() => {
-    console.log("props.flash.message", props.flash?.message);
     if (props.flash?.message) {
       toast.success("Success", {
-        description: props.flash.message,
+        description: props.flash.message.message,
         position: "top-right",
         richColors: true,
       });
     }
   }, [props.flash]);
 
-  console.log("accountsData", accountsData);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Accounts" />
-      <div className="flex items-center justify-end">
-        {/* <NewProductDrawer /> */}
-      </div>
-      <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-        <PageContent data={accountsData.data} meta={accountsData.meta} />
-      </div>
+      <AccountProvider userAuth={props.auth.user}>
+        <Head title="Accounts" />
+        <div className="flex items-center justify-end"></div>
+        <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+          <PageContent data={accountsData.data} meta={accountsData.meta} />
+        </div>
+      </AccountProvider>
     </AppLayout>
   );
 };

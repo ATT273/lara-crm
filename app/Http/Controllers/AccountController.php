@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
@@ -50,17 +51,33 @@ class AccountController extends Controller
   /**
    * Assign user role.
    */
-  public function assignRole(Request $request)
+  public function assignRole(Request $request, User $user)
   {
-    //
     $validated = $request->validate([
       'roleCode' => 'required|string',
       'active' => 'required|boolean',
     ]);
-    User::update($validated);
+    $user->update($validated);
     return redirect()->route('accounts.index', [
       'page' => 1,
       'take' => 1,
     ])->with('message', 'Account updated successfully.');
+  }
+
+  public function update(Request $request, User $user)
+  {
+    $validated =  $request->validate([
+      'name' => 'required|string|max:255',
+      'roleCode' => 'required|string',
+      'active' => 'required|boolean',
+    ]);
+    $user->update($validated);
+    return redirect()->route('accounts.index', [
+      'page' => 1,
+      'take' => 1,
+    ])->with('message', [
+      'message' => 'Account updated successfully.',
+      'code' => 'ACCOUNT_UPDATED_SUCCESSFULLY',
+    ]);
   }
 }

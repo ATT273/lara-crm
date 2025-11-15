@@ -91,7 +91,10 @@ class ProductController extends Controller
     return redirect()->route('products.index', [
       'page' => 1,
       'take' => 1,
-    ])->with('message', 'Product created successfully.');
+    ])->with('message', [
+      'message' => 'Product created successfully.',
+      'code' => 'PRODUCT_CREATED_SUCCESSFULLY',
+    ]);
   }
 
   /**
@@ -121,9 +124,33 @@ class ProductController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, ProductModel $productModel)
+  public function update(Request $request, ProductModel $product)
   {
-    //
+    $validated =  $request->validate([
+      'name' => 'required|string|max:255',
+      'description' => 'nullable|string',
+      'mainCategory' => 'required|numeric',
+      'subCategory' => 'required|numeric',
+      'price' => 'required|numeric|min:0',
+      'cost' => 'required|numeric|min:0',
+      'unit' => 'required|string|max:10',
+      'tags' => 'nullable|array',
+      'tags.*' => 'string|max:30',
+      'sizes' => 'nullable|array',
+      'sizes.*' => 'string|max:30',
+      'images' => 'nullable|array',
+      'images.*.id' => 'nullable|integer',
+      'images.*.name' => 'required_with:images|string|max:255',
+      'images.*.url' => 'required_with:images|string|max:500',
+    ]);
+    $product->update($validated);
+    return redirect()->route('products.index', [
+      'page' => 1,
+      'take' => 5,
+    ])->with('message', [
+      'message' => 'Product updated successfully.',
+      'code' => 'PRODUCT_UPDATED_SUCCESSFULLY',
+    ]);
   }
 
   /**

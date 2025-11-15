@@ -6,7 +6,8 @@ use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
   Route::get('accounts', [AccountController::class, 'index'])->name('accounts.index');
-  Route::put('accounts', [AccountController::class, 'assignRole'])->name('accounts.assign');
+  Route::put('accounts/assign/{user}', [AccountController::class, 'assignRole'])->name('accounts.assign');
+  Route::put('accounts/{user}', [AccountController::class, 'update'])->name('accounts.update');
   // Route::get('accounts', function () {
   //   return Inertia::render('accounts/index');
   // })->name('accounts.index');
