@@ -2,7 +2,7 @@ import ProductController from "@/actions/App/Http/Controllers/ProductController"
 import { formatCurrency } from "@/lib/utils";
 import { IProductResponse } from "@/types/product.type";
 // import { Link } from "@inertiajs/react";
-import { PenLine, Trash2 } from "lucide-react";
+import { PenLine, Shapes, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -50,6 +50,7 @@ const ProductTable = ({ products }: ProductTableProps) => {
             <TableHead>Description</TableHead>
             <TableHead>Tags</TableHead>
             <TableHead>Sizes</TableHead>
+            <TableHead>Sku</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -77,6 +78,15 @@ const ProductTable = ({ products }: ProductTableProps) => {
                     {tag}
                   </Badge>
                 ))}
+              </TableCell>
+              <TableCell>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="grid place-items-center"
+                >
+                  <Shapes className="size-4" />
+                </Button>
               </TableCell>
               <TableCell className="w-[100px]">
                 <div className="flex w-[100px] gap-2">
