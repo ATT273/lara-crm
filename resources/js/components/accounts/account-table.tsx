@@ -67,9 +67,9 @@ const AccountTable = ({ accounts }: AccountTableProps) => {
                     size="sm"
                     className="grid place-items-center"
                     onClick={() => handleGetUserDetail(account)}
-                    disabled={
-                      !checkRole(userAuth?.roleCode ?? "", MANAGEMENT_LEVELS)
-                    }
+                    // disabled={
+                    //   !checkRole(userAuth?.roleCode ?? "", MANAGEMENT_LEVELS)
+                    // }
                   >
                     <PenLine className="h-4 w-4" />
                   </Button>
