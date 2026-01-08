@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product as ProductModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -159,5 +162,108 @@ class ProductController extends Controller
   public function destroy(ProductModel $productModel)
   {
     //
+  }
+
+  public function search(Request $request)
+  {
+    Log::info('🔥🔥🔥 SEARCH FUNCTION CALLED 🔥🔥🔥');
+    Log::info('Request URL: ' . $request->fullUrl());
+    try {
+      // Validate request inputs
+      $validated = $request->validate([
+        'term' => 'nullable|string|max:255',
+        'name' => 'nullable|string|max:255',
+        'tag' => 'nullable|string|max:100',
+        'size' => 'nullable|string|max:50',
+        'mainCategory' => 'nullable|integer',
+        'subCategory' => 'nullable|integer',
+        'sort' => ['nullable', 'string', Rule::in(['name', 'price', 'created_at', 'updated_at'])],
+        'direction' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
+        'limit' => 'nullable|integer|min:1|max:100',
+      ]);
+
+      // Build query
+      $query = ProductModel::query();
+
+      // Search term (tìm kiếm chung)
+      if (!empty($validated['term'])) {
+        $term = $validated['term'];
+        $query->where(function ($q) use ($term) {
+          $q->where('name', 'like', "%{$term}%")
+            ->orWhere('description', 'like', "%{$term}%");
+        });
+      }
+
+      // Name filter (tìm kiếm theo tên cụ thể)
+      if (!empty($validated['name'])) {
+        $query->where('name', 'like', "%{$validated['name']}%");
+      }
+
+      // Tag filter (JSON contains)
+      if (!empty($validated['tag'])) {
+        $query->whereJsonContains('tags', $validated['tag']);
+      }
+
+      // Size filter (JSON contains)
+      if (!empty($validated['size'])) {
+        $query->whereJsonContains('sizes', $validated['size']);
+      }
+      // main category filter (JSON contains)
+      if (!empty($validated['mainCategory'])) {
+        $query->where('"mainCategory"', $validated['mainCategory']);
+      }
+      // sub category filter (JSON contains)
+      if (!empty($validated['subCategory'])) {
+        $query->where('"subCategory"', $validated['subCategory']);
+      }
+
+      // Sorting
+      $sortField = $validated['sort'] ?? 'created_at';
+      $sortDirection = $validated['direction'] ?? 'desc';
+      $query->orderBy($sortField, $sortDirection);
+
+      // Apply limit if specified
+      $limit = $validated['limit'] ?? 10;
+      $products = $query->limit($limit)->get();
+
+      // Return consistent API response
+      return $this->successResponse(
+        data: $products,
+        message: 'Products search results fetched successfully',
+        code: 'PRODUCTS_SEARCH_RESULTS_FETCHED_SUCCESSFULLY'
+      );
+    } catch (\Exception $e) {
+      Log::error('Product search error: ' . $e->getMessage());
+      Log::error('Stack trace: ' . $e->getTraceAsString());
+
+      return response()->json([
+        'status' => 500,
+        'message' => 'An error occurred while searching products',
+        'code' => 'INTERNAL_SERVER_ERROR',
+        'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+      ], 500);
+    }
+  }
+  /**
+   * Standard success response format
+   * 
+   * @param mixed $data
+   * @param string $message
+   * @param string $code
+   * @param int $statusCode
+   * @return JsonResponse
+   */
+  private function successResponse(
+    mixed $data,
+    string $message = 'Success',
+    string $code = 'SUCCESS',
+    int $statusCode = 200
+  ): JsonResponse {
+    return response()->json([
+      'status' => $statusCode,
+      'message' => $message,
+      'code' => $code,
+      'data' => $data,
+    ], $statusCode);
   }
 }

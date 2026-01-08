@@ -1,60 +1,25 @@
-import ProductController from "@/actions/App/Http/Controllers/ProductController";
-import { formatCurrency } from "@/lib/utils";
+import CategoryController from "@/actions/App/Http/Controllers/CategoryController";
 import { IProductResponse } from "@/types/product.type";
 // import { Link } from "@inertiajs/react";
-import { PenLine, Shapes, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-import NewProductDrawer from "./new-product-drawer";
+// import NewProductDrawer from "./new-product-drawer";
 
 interface ProductTableProps {
-  products: IProductResponse[];
+  categories: IProductResponse[];
 }
-const ProductTable = ({ products }: ProductTableProps) => {
-  const { show } = ProductController;
+const CategoryTable = ({ categories }: ProductTableProps) => {
+  const { show } = CategoryController;
   const [openEditDrawer, setOpenEditDrawer] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<
     IProductResponse | undefined
   >();
 
-  const handleGetProductDetail = async (productId: number) => {
-    try {
-      const res = await fetch(show.url(productId));
-      if (!res.ok) {
-        toast.error("Error", {
-          description: "Failed to load product detail",
-          position: "top-right",
-          richColors: true,
-        });
-        throw new Error("Failed to load product detail");
-      }
-      const result = await res.json();
-      if (result.status === 200) {
-        setSelectedProduct(result.data);
-        setOpenEditDrawer(true);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
   return (
     <div className="flex-1">
-      <Table>
+      {/* <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Unit</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Tags</TableHead>
             <TableHead>Sizes</TableHead>
@@ -63,7 +28,7 @@ const ProductTable = ({ products }: ProductTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product) => (
+          {categories.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="w-[200px] overflow-hidden text-ellipsis">
                 {product.name}
@@ -118,14 +83,14 @@ const ProductTable = ({ products }: ProductTableProps) => {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
-      <NewProductDrawer
+      </Table> */}
+      {/* <NewProductDrawer
         open={openEditDrawer}
         onOpenChange={setOpenEditDrawer}
         initialData={selectedProduct}
-      />
+      /> */}
     </div>
   );
 };
 
-export default ProductTable;
+export default CategoryTable;
