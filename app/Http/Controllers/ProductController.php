@@ -166,8 +166,6 @@ class ProductController extends Controller
 
   public function search(Request $request)
   {
-    Log::info('🔥🔥🔥 SEARCH FUNCTION CALLED 🔥🔥🔥');
-    Log::info('Request URL: ' . $request->fullUrl());
     try {
       // Validate request inputs
       $validated = $request->validate([
@@ -179,9 +177,11 @@ class ProductController extends Controller
         'subCategory' => 'nullable|integer',
         'sort' => ['nullable', 'string', Rule::in(['name', 'price', 'created_at', 'updated_at'])],
         'direction' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
-        'limit' => 'nullable|integer|min:1|max:100',
+        'take' => 'nullable|integer|min:1|max:100',
       ]);
 
+      $take = $request->input('take', 10);
+      $page = $request->input('page', 1);
       // Build query
       $query = ProductModel::query();
 
@@ -210,11 +210,11 @@ class ProductController extends Controller
       }
       // main category filter (JSON contains)
       if (!empty($validated['mainCategory'])) {
-        $query->where('"mainCategory"', $validated['mainCategory']);
+        $query->where('mainCategory', $validated['mainCategory']);
       }
       // sub category filter (JSON contains)
       if (!empty($validated['subCategory'])) {
-        $query->where('"subCategory"', $validated['subCategory']);
+        $query->where('subCategory', $validated['subCategory']);
       }
 
       // Sorting
@@ -223,8 +223,8 @@ class ProductController extends Controller
       $query->orderBy($sortField, $sortDirection);
 
       // Apply limit if specified
-      $limit = $validated['limit'] ?? 10;
-      $products = $query->limit($limit)->get();
+      $products = $query->paginate($take, ['*'], 'page', $page);
+
 
       // Return consistent API response
       return $this->successResponse(
@@ -233,9 +233,6 @@ class ProductController extends Controller
         code: 'PRODUCTS_SEARCH_RESULTS_FETCHED_SUCCESSFULLY'
       );
     } catch (\Exception $e) {
-      Log::error('Product search error: ' . $e->getMessage());
-      Log::error('Stack trace: ' . $e->getTraceAsString());
-
       return response()->json([
         'status' => 500,
         'message' => 'An error occurred while searching products',
@@ -263,7 +260,16 @@ class ProductController extends Controller
       'status' => $statusCode,
       'message' => $message,
       'code' => $code,
-      'data' => $data,
+      'data' => [
+        'data' => $data->items(),
+        'meta' => [
+          'page' => $data->currentPage(),
+          'lastPage' => $data->lastPage(),
+          'take' => $data->perPage(),
+          'total' => $data->total(),
+          'count' => $data->count(),
+        ],
+      ]
     ], $statusCode);
   }
 }

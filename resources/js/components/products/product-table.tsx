@@ -56,8 +56,8 @@ const ProductTable = ({ products }: ProductTableProps) => {
             <TableHead>Price</TableHead>
             <TableHead>Unit</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Tags</TableHead>
             <TableHead>Sizes</TableHead>
+            <TableHead>Tags</TableHead>
             <TableHead>Sku</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>

@@ -1,11 +1,19 @@
 "use client";
 
 import { ICategoryResponse } from "@/types/category.type";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 type CategoryContextType = {
   parentCategories: ICategoryResponse[];
   childCategories: ICategoryResponse[];
+  selectedParent: ICategoryResponse | null;
+  selectedChild: ICategoryResponse | null;
+  setSelectedParent: React.Dispatch<
+    React.SetStateAction<ICategoryResponse | null>
+  >;
+  setSelectedChild: React.Dispatch<
+    React.SetStateAction<ICategoryResponse | null>
+  >;
 };
 
 type CategoryProviderProps = {
@@ -18,6 +26,11 @@ const CategoryProvider = ({
   children,
   categoriesResponse,
 }: CategoryProviderProps) => {
+  const [selectedParent, setSelectedParent] =
+    useState<ICategoryResponse | null>(null);
+  const [selectedChild, setSelectedChild] = useState<ICategoryResponse | null>(
+    null,
+  );
   const parentCategories = useMemo(() => {
     if (!categoriesResponse) return [];
     return categoriesResponse.filter((category) => category.parentId === null);
@@ -29,7 +42,16 @@ const CategoryProvider = ({
   }, [categoriesResponse]);
 
   return (
-    <CategoryContext.Provider value={{ parentCategories, childCategories }}>
+    <CategoryContext.Provider
+      value={{
+        parentCategories,
+        childCategories,
+        selectedChild,
+        selectedParent,
+        setSelectedChild,
+        setSelectedParent,
+      }}
+    >
       {children}
     </CategoryContext.Provider>
   );

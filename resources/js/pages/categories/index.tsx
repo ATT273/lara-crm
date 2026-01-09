@@ -26,11 +26,11 @@ const CategoryPage = () => {
       });
     }
   }, [props.flash]);
-  console.log("categoryData", categoryData);
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Categories" />
-      <div className="px-4 py-2">
+      <div className="h-full min-h-0 overflow-hidden px-4 py-2">
         <PageContent data={categoryData.data} meta={categoryData.meta} />
       </div>
     </AppLayout>

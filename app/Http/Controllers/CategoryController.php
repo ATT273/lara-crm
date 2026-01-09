@@ -117,4 +117,18 @@ class CategoryController extends Controller
   {
     //
   }
+
+  // Get all categories without pagination
+  public function getAll()
+  {
+    $categories = Category::all();
+    return response()->json([
+      'status' => 200,
+      'message' => 'Categories retrieved successfully',
+      'code' => 'CATEGORIES_RETRIEVED_SUCCESSFULLY',
+      'data' => [
+        'data' => $categories,
+      ]
+    ], 200);
+  }
 }

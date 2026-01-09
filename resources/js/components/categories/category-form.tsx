@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ICategoryResponse } from "@/types/category.type";
+import { Spinner } from "../ui/spinner";
 import { useCategoryContext } from "./category-provider";
 
 interface NewCategoryDialogProps {
@@ -109,7 +110,7 @@ const CategoryForm = ({ initialData, setOpen }: NewCategoryDialogProps) => {
           Cancel
         </Button>
         <Button onClick={handleSubmit} disabled={processing}>
-          Save - {processing ? "..." : "Now"}
+          {processing ? <Spinner /> : null} Save
         </Button>
       </div>
     </form>
