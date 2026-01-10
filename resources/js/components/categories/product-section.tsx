@@ -12,7 +12,7 @@ import ProductTable from "./product-table";
 
 const ProductSection = () => {
   const { search } = ProductController;
-  const { selectedChild, selectedParent } = useCategoryContext();
+  const { selectedChildId, selectedParentId } = useCategoryContext();
   const [products, setProducts] = useState<IProductResponse[]>([]);
   const [meta, setMeta] = useState<IResponseMeta>();
 
@@ -21,8 +21,8 @@ const ProductSection = () => {
       const res = await fetch(
         search.url({
           query: {
-            mainCategory: selectedParent?.id,
-            subCategory: selectedChild?.id,
+            mainCategory: selectedParentId,
+            subCategory: selectedChildId,
             page: DEFAULT_PAGE,
             take: DEFAULT_LIMIT,
           },
@@ -45,13 +45,13 @@ const ProductSection = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [selectedChild, selectedParent]);
+  }, [selectedParentId, selectedChildId]);
 
   useEffect(() => {
-    if (selectedParent || selectedChild) {
+    if (selectedParentId || selectedChildId) {
       handleSearchProductByCategtory();
     }
-  }, [selectedChild, selectedParent]);
+  }, [selectedChildId, selectedParentId]);
 
   return (
     <div className="flex max-h-[600px] flex-1 flex-col overflow-hidden">

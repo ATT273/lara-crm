@@ -14,48 +14,60 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ICategoryResponse } from "@/types/category.type";
+import { router } from "@inertiajs/react";
 import { Spinner } from "../ui/spinner";
 import { useCategoryContext } from "./category-provider";
-
 interface NewCategoryDialogProps {
-  // ref: React.Ref<NewCategoryDialogRef>;
   initialData?: ICategoryResponse;
   setOpen: (open: boolean) => void;
 }
 
 const CategoryForm = ({ initialData, setOpen }: NewCategoryDialogProps) => {
   const { store, update } = CategoryController;
-  const { parentCategories } = useCategoryContext();
+  const { parentCategories, isEditing, setIsEditing } = useCategoryContext();
   const { data, put, post, setData, processing } = useForm<
     Omit<ICategoryResponse, "id">
   >({
-    name: initialData?.name || "",
-    parentId: initialData?.parentId || null,
-    description: initialData?.description || "",
+    name: isEditing && initialData ? initialData.name : "",
+    parentId: isEditing && initialData ? initialData.parentId : null,
+    description: isEditing && initialData ? initialData.description : "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (initialData?.id) {
+    if (isEditing && initialData) {
       put(update.url(initialData.id), {
         onSuccess: () => {
           setOpen(false);
+          setIsEditing(false);
+          resetForm();
+          router.reload({ only: ["data"] });
         },
       });
     } else {
       post(store.url(), {
         onSuccess: () => {
           setOpen(false);
+          setIsEditing(false);
+          resetForm();
+          router.reload({ only: ["data"] });
         },
       });
     }
   };
 
+  const resetForm = () => {
+    setData({
+      name: "",
+      parentId: null,
+      description: "",
+    });
+  };
   return (
     <form onSubmit={handleSubmit} className="flex h-full flex-col gap-4">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          <Label className="min-w-[120px]">Parent category: </Label>
+          <Label className="min-w-[120px]">Parent category:</Label>
           <Select
             value={data.parentId?.toString() || ""}
             onValueChange={(value) => {
@@ -106,7 +118,14 @@ const CategoryForm = ({ initialData, setOpen }: NewCategoryDialogProps) => {
         </div>
       </div>
       <div className="flex items-center justify-end gap-2">
-        <Button variant={"ghost"} onClick={() => setOpen(false)}>
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            setIsEditing(false);
+            setOpen(false);
+            resetForm();
+          }}
+        >
           Cancel
         </Button>
         <Button onClick={handleSubmit} disabled={processing}>

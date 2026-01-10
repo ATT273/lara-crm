@@ -107,7 +107,19 @@ class CategoryController extends Controller
    */
   public function update(Request $request, Category $category)
   {
-    //
+    $validated = $request->validate([
+      'name' => 'required|string|max:255',
+      'description' => 'nullable|string',
+      'parentId' => 'nullable|numeric',
+    ]);
+    $category->update($validated);
+    return redirect()->route('categories.index', [
+      'page' => 1,
+      'take' => 10,
+    ])->with('message', [
+      'message' => 'Category updated successfully.',
+      'code' => 'CATEGORY_CREATED_SUCCESSFULLY',
+    ]);
   }
 
   /**

@@ -6,14 +6,12 @@ import { createContext, useContext, useMemo, useState } from "react";
 type CategoryContextType = {
   parentCategories: ICategoryResponse[];
   childCategories: ICategoryResponse[];
-  selectedParent: ICategoryResponse | null;
-  selectedChild: ICategoryResponse | null;
-  setSelectedParent: React.Dispatch<
-    React.SetStateAction<ICategoryResponse | null>
-  >;
-  setSelectedChild: React.Dispatch<
-    React.SetStateAction<ICategoryResponse | null>
-  >;
+  selectedParentId?: number;
+  selectedChildId?: number;
+  isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedParentId: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setSelectedChildId: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 type CategoryProviderProps = {
@@ -26,11 +24,10 @@ const CategoryProvider = ({
   children,
   categoriesResponse,
 }: CategoryProviderProps) => {
-  const [selectedParent, setSelectedParent] =
-    useState<ICategoryResponse | null>(null);
-  const [selectedChild, setSelectedChild] = useState<ICategoryResponse | null>(
-    null,
-  );
+  const [selectedParentId, setSelectedParentId] = useState<number>();
+  const [selectedChildId, setSelectedChildId] = useState<number>();
+
+  const [isEditing, setIsEditing] = useState(false);
   const parentCategories = useMemo(() => {
     if (!categoriesResponse) return [];
     return categoriesResponse.filter((category) => category.parentId === null);
@@ -46,10 +43,12 @@ const CategoryProvider = ({
       value={{
         parentCategories,
         childCategories,
-        selectedChild,
-        selectedParent,
-        setSelectedChild,
-        setSelectedParent,
+        selectedChildId,
+        selectedParentId,
+        isEditing,
+        setIsEditing,
+        setSelectedChildId,
+        setSelectedParentId,
       }}
     >
       {children}

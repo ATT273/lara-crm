@@ -20,20 +20,41 @@ const CategorySection = () => {
   const {
     parentCategories,
     childCategories,
-    selectedChild,
-    selectedParent,
-    setSelectedChild,
-    setSelectedParent,
+    selectedChildId,
+    selectedParentId,
+    setIsEditing,
+    setSelectedParentId,
+    setSelectedChildId,
   } = useCategoryContext();
 
   const filteredChildCategories = useMemo(() => {
-    if (!selectedParent) return [];
+    if (!selectedParentId) return [];
     return childCategories.filter(
-      (category) => category.parentId === selectedParent.id,
+      (category) => category.parentId === selectedParentId,
     );
-  }, [childCategories, selectedParent]);
+  }, [childCategories, selectedParentId]);
+
+  const selectedCategory = useMemo(() => {
+    if (selectedChildId) {
+      return (
+        childCategories.find((category) => category.id === selectedChildId) ||
+        null
+      );
+    }
+    if (selectedParentId) {
+      return (
+        parentCategories.find((category) => category.id === selectedParentId) ||
+        null
+      );
+    }
+    return null;
+  }, [selectedChildId, selectedParentId, childCategories, parentCategories]);
 
   const openNewCategoryDialog = () => {
+    NewCategoryDialogRef.current?.open();
+  };
+  const openEditCategoryDialog = () => {
+    setIsEditing(true);
     NewCategoryDialogRef.current?.open();
   };
 
@@ -42,14 +63,10 @@ const CategorySection = () => {
       <div className="flex items-center justify-between">
         <div className="flex gap-4">
           <Select
-            value={selectedParent?.id.toString() || ""}
+            value={selectedParentId?.toString() || ""}
             onValueChange={(value) => {
-              const selected =
-                parentCategories.find(
-                  (category) => category.id === Number(value),
-                ) || null;
-              setSelectedParent(selected);
-              setSelectedChild(null);
+              setSelectedParentId(value ? Number(value) : undefined);
+              setSelectedChildId(undefined);
             }}
           >
             <SelectTrigger className="w-[200px]">
@@ -75,13 +92,9 @@ const CategorySection = () => {
             </SelectContent>
           </Select>
           <Select
-            value={selectedChild?.id.toString() || ""}
+            value={selectedChildId?.toString() || ""}
             onValueChange={(value) => {
-              const selected =
-                childCategories.find(
-                  (category) => category.id === Number(value),
-                ) || null;
-              setSelectedChild(selected);
+              setSelectedChildId(value ? Number(value) : undefined);
             }}
           >
             <SelectTrigger className="w-[200px]">
@@ -112,27 +125,39 @@ const CategorySection = () => {
       <div className="rounded-md bg-neutral-200 px-4 py-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-xl font-semibold">
-            {selectedChild?.name ||
-              selectedParent?.name ||
+            {selectedCategory?.name ||
+              selectedCategory?.name ||
               "No category selected"}
           </p>
-          <div className="flex gap-1">
-            <Button variant="ghost" className="grid size-8 place-items-center">
-              <PenBox />
-            </Button>
-            <Button variant="ghost" className="grid size-8 place-items-center">
-              <Trash2 />
-            </Button>
-          </div>
+          {selectedCategory && (
+            <div className="flex gap-1">
+              <Button
+                variant="ghost"
+                className="grid size-8 place-items-center"
+                onClick={openEditCategoryDialog}
+              >
+                <PenBox />
+              </Button>
+              <Button
+                variant="ghost"
+                className="grid size-8 place-items-center"
+              >
+                <Trash2 />
+              </Button>
+            </div>
+          )}
         </div>
         <p className="text-gray-500">
-          {selectedChild?.description ||
-            selectedParent?.description ||
+          {selectedCategory?.description ||
+            selectedCategory?.description ||
             "No description available"}
         </p>
       </div>
 
-      <NewCategoryDialog ref={NewCategoryDialogRef} />
+      <NewCategoryDialog
+        ref={NewCategoryDialogRef}
+        initialData={selectedCategory || undefined}
+      />
     </div>
   );
 };
