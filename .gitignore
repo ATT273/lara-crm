@@ -8,6 +8,7 @@ node_modules
 /storage/pail
 /resources/js/vendor
 /resources/js/actions/
+/resources/js/routes/
 /vendor
 .DS_Store
 .env
