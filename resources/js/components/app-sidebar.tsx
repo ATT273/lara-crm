@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/sidebar";
 import { dashboard } from "@/routes";
 import accounts from "@/routes/accounts";
+import categories from "@/routes/categories";
 import products from "@/routes/products";
 import { type NavItem } from "@/types";
 import { Link } from "@inertiajs/react";
-import { Box, LayoutGrid, Users } from "lucide-react";
+import { Box, Boxes, LayoutGrid, Users } from "lucide-react";
 import AppLogo from "./app-logo";
 
 const mainNavItems: NavItem[] = [
@@ -29,7 +30,17 @@ const mainNavItems: NavItem[] = [
     icon: LayoutGrid,
   },
   {
-    title: "Product",
+    title: "Categories",
+    href: categories.index.url({
+      query: {
+        page: 1,
+        take: 5,
+      },
+    }),
+    icon: Boxes,
+  },
+  {
+    title: "Products",
     href: products.index.url({
       query: {
         page: 1,

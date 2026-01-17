@@ -12,9 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { mainCategory, subCategory } from "@/constants/data.constants";
 import { IProductResponse } from "@/types/product.type";
 import { useForm } from "@inertiajs/react";
+import { useEffect, useMemo, useRef } from "react";
+import { useCategoryContext } from "../categories/category-provider";
 import TagInput from "../custom-components/tag-input";
 import { Spinner } from "../ui/spinner";
 
@@ -24,18 +25,32 @@ interface ProductFormProps {
 }
 const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
   const { store, update } = ProductController;
-
+  const {
+    parentCategories,
+    childCategories,
+    selectedParent,
+    setSelectedParent,
+    setSelectedChild,
+  } = useCategoryContext();
+  const initiateForm = useRef<boolean>(false);
   const { data, post, put, setData, processing, errors } = useForm({
     name: initialData?.name || "",
     description: initialData?.description || "",
     unit: initialData?.unit || "",
     price: initialData?.price || 0,
     cost: initialData?.cost || 0,
-    mainCategory: initialData?.mainCategory || 0,
-    subCategory: initialData?.subCategory || 0,
+    mainCategory: initialData?.mainCategory || null,
+    subCategory: initialData?.subCategory || null,
     tags: initialData?.tags || [],
     sizes: initialData?.sizes || [],
   });
+
+  const filteredChildCategories = useMemo(() => {
+    if (!selectedParent) return [];
+    return childCategories.filter(
+      (category) => category.parentId === selectedParent.id,
+    );
+  }, [childCategories, selectedParent]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +69,33 @@ const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
     }
   };
 
+  const onParentCategoryChange = (value: string) => {
+    const selected =
+      parentCategories.find((category) => category.id === Number(value)) ||
+      null;
+    setSelectedParent(selected);
+    setData({
+      ...data,
+      mainCategory: value,
+      subCategory: initiateForm.current ? initialData?.subCategory : null,
+    });
+    setSelectedChild(null);
+    if (initiateForm.current) {
+      initiateForm.current = false;
+    }
+  };
+
+  useEffect(() => {
+    if (initiateForm.current && initialData) {
+      const selected =
+        parentCategories.find(
+          (category) => category.id === Number(initialData?.mainCategory),
+        ) || null;
+      setSelectedParent(selected);
+      initiateForm.current = false;
+    }
+  }, [initiateForm, initialData, parentCategories]);
+
   return (
     <form onSubmit={handleSubmit} className="flex h-full flex-col gap-4">
       <div className="flex-1 px-4">
@@ -61,10 +103,8 @@ const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
           <div className="flex-1">
             <Label htmlFor="name">Main category</Label>
             <Select
-              value={data.mainCategory.toString()}
-              onValueChange={(value) => {
-                setData({ ...data, mainCategory: Number(value) });
-              }}
+              value={data.mainCategory?.toString() || ""}
+              onValueChange={onParentCategoryChange}
             >
               <SelectTrigger className="">
                 <SelectValue placeholder="Select main category" />
@@ -72,11 +112,20 @@ const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Main category</SelectLabel>
-                  {mainCategory.map((category) => (
-                    <SelectItem key={category.value} value={category.value}>
-                      {category.label}
+                  {parentCategories.length > 0 ? (
+                    parentCategories.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem disabled key="empty" value="empty">
+                      Empty
                     </SelectItem>
-                  ))}
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -87,9 +136,9 @@ const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
           <div className="flex-1">
             <Label htmlFor="name">Sub category</Label>
             <Select
-              value={data.subCategory.toString()}
+              value={data.subCategory?.toString() || ""}
               onValueChange={(value) => {
-                setData({ ...data, subCategory: Number(value) });
+                setData({ ...data, subCategory: value });
               }}
             >
               <SelectTrigger className="">
@@ -98,11 +147,20 @@ const ProductForm = ({ initialData, setOpen }: ProductFormProps) => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Sub category</SelectLabel>
-                  {subCategory.map((category) => (
-                    <SelectItem key={category.value} value={category.value}>
-                      {category.label}
+                  {filteredChildCategories.length > 0 ? (
+                    filteredChildCategories.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem disabled key="empty" value="empty">
+                      Empty
                     </SelectItem>
-                  ))}
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>

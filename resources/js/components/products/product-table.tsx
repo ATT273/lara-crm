@@ -4,6 +4,7 @@ import { IProductResponse } from "@/types/product.type";
 // import { Link } from "@inertiajs/react";
 import { PenLine, Shapes, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -29,7 +30,14 @@ const ProductTable = ({ products }: ProductTableProps) => {
   const handleGetProductDetail = async (productId: number) => {
     try {
       const res = await fetch(show.url(productId));
-      if (!res.ok) throw new Error("Failed to load product detail");
+      if (!res.ok) {
+        toast.error("Error", {
+          description: "Failed to load product detail",
+          position: "top-right",
+          richColors: true,
+        });
+        throw new Error("Failed to load product detail");
+      }
       const result = await res.json();
       if (result.status === 200) {
         setSelectedProduct(result.data);
@@ -48,8 +56,8 @@ const ProductTable = ({ products }: ProductTableProps) => {
             <TableHead>Price</TableHead>
             <TableHead>Unit</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Tags</TableHead>
             <TableHead>Sizes</TableHead>
+            <TableHead>Tags</TableHead>
             <TableHead>Sku</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
